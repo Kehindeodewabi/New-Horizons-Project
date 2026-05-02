@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phone Sales Performance Analysis — Kehinde Odewabi · New Horizons</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f8f9fb;
+    --surface2: #f0f2f5;
+    --border: #e2e6ea;
+    --dark: #0f1923;
+    --ink: #2c3e50;
+    --muted: #7f8c9a;
+    --accent: #1a56db;
+    --accent2: #0e9f6e;
+    --amber: #d97706;
+    --red: #e53e3e;
+    --accent-light: #ebf0ff;
+    --green-light: #e6f9f3;
+    --amber-light: #fef3e2;
+    --red-light: #fff0f0;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    padding: 0 48px;
+    height: 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--dark);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .nav-left { display: flex; align-items: center; gap: 24px; }
+  .nav-logo {
+    font-weight: 600; font-size: 0.85rem;
+    color: #fff; text-decoration: none; letter-spacing: 0.02em;
+  }
+  .nav-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.15); }
+  .nav-project { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+  .nav-badge {
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 3px 10px;
+    background: var(--accent); color: #fff; border-radius: 2px;
+  }
+  .nav-back {
+    font-size: 0.75rem; color: rgba(255,255,255,0.4);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-back:hover { color: #fff; }
+
+  /* HERO */
+  .hero {
+    background: var(--dark);
+    padding: 100px 48px 64px;
+    border-bottom: 3px solid var(--accent);
+  }
+  .hero-inner { max-width: 1100px; margin: 0 auto; }
+  .hero-institution {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    padding: 6px 16px; margin-bottom: 28px;
+    font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+  }
+  .hero-institution span { color: var(--accent); font-size: 0.9rem; }
+  .hero h1 {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 600; line-height: 1.15;
+    color: #fff; margin-bottom: 20px; max-width: 860px;
+  }
+  .hero h1 em { font-style: italic; color: #93c5fd; }
+  .hero-sub {
+    font-size: 0.95rem; color: rgba(255,255,255,0.5);
+    max-width: 620px; line-height: 1.75; margin-bottom: 40px;
+  }
+  .hero-meta-row {
+    display: flex; flex-wrap: wrap; gap: 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 32px;
+  }
+  .meta-pill {
+    padding: 0 32px 0 0; margin-right: 32px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .meta-pill:last-child { border-right: none; }
+  .meta-label { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 4px; }
+  .meta-value { font-size: 0.88rem; font-weight: 500; color: rgba(255,255,255,0.85); }
+
+  /* LIVE LINKS BAR */
+  .live-bar {
+    background: var(--accent-light);
+    border-bottom: 1px solid #c3d3f7;
+    padding: 16px 48px;
+  }
+  .live-bar-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .live-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .live-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 18px;
+    font-size: 0.8rem; font-weight: 600;
+    text-decoration: none; border-radius: 3px;
+    transition: all 0.2s;
+  }
+  .live-btn-pbi {
+    background: #f2c811; color: #1a1a1a;
+    border: 1px solid #d4ac00;
+  }
+  .live-btn-pbi:hover { background: #e0b800; }
+  .live-btn-tab {
+    background: #1f6db5; color: #fff;
+    border: 1px solid #1558a0;
+  }
+  .live-btn-tab:hover { background: #1558a0; }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.6; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:0.6} 50%{opacity:1} }
+
+  /* KPI STRIP */
+  .kpi-strip {
+    display: grid; grid-template-columns: repeat(6,1fr);
+    border-bottom: 1px solid var(--border);
+  }
+  .kpi-cell {
+    padding: 28px 24px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .kpi-cell:last-child { border-right: none; }
+  .kpi-cell::after {
+    content: ''; position: absolute;
+    bottom: 0; left: 0; right: 0; height: 3px;
+  }
+  .kpi-cell.k1::after { background: var(--accent); }
+  .kpi-cell.k2::after { background: var(--accent2); }
+  .kpi-cell.k3::after { background: var(--amber); }
+  .kpi-cell.k4::after { background: var(--red); }
+  .kpi-cell.k5::after { background: #8b5cf6; }
+  .kpi-cell.k6::after { background: #06b6d4; }
+  .kpi-num {
+    font-size: 1.65rem; font-weight: 700;
+    line-height: 1; margin-bottom: 4px; color: var(--dark);
+  }
+  .kpi-num.blue { color: var(--accent); }
+  .kpi-num.green { color: var(--accent2); }
+  .kpi-num.amber { color: var(--amber); }
+  .kpi-num.red { color: var(--red); }
+  .kpi-label { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.05em; font-weight: 500; }
+  .kpi-note { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+
+  /* LAYOUT */
+  .page-wrap { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+  .two-col { display: grid; grid-template-columns: 1fr 300px; gap: 64px; padding: 64px 0; }
+  .section { margin-bottom: 60px; }
+
+  /* SECTION HEADERS */
+  .sec-head {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sec-num {
+    width: 28px; height: 28px;
+    background: var(--dark); color: #fff;
+    font-size: 0.7rem; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; border-radius: 2px;
+  }
+  h2 {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.55rem; font-weight: 600;
+    color: var(--dark); line-height: 1.2;
+  }
+  h3 {
+    font-size: 0.88rem; font-weight: 600;
+    color: var(--dark); margin: 24px 0 10px;
+    letter-spacing: 0.01em;
+  }
+  p { margin-bottom: 14px; color: var(--ink); }
+
+  /* CLEANING TABLE */
+  .clean-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.84rem; }
+  .clean-table th {
+    font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+    padding: 10px 14px; text-align: left;
+    background: var(--surface); border-bottom: 2px solid var(--border);
+  }
+  .clean-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .clean-table tr:hover td { background: var(--surface); }
+  .tag {
+    font-size: 0.62rem; font-weight: 600; letter-spacing: 0.06em;
+    padding: 2px 8px; border-radius: 2px; display: inline-block;
+  }
+  .tag-fix { background: var(--amber-light); color: var(--amber); }
+  .tag-add { background: var(--green-light); color: var(--accent2); }
+  .tag-remove { background: var(--red-light); color: var(--red); }
+  .tag-rename { background: var(--accent-light); color: var(--accent); }
+  td code {
+    font-family: 'Courier New', monospace; font-size: 0.78rem;
+    background: var(--surface2); padding: 1px 5px; color: var(--amber); border-radius: 2px;
+  }
+
+  /* CODE BLOCKS */
+  .code-wrap { margin: 16px 0; border: 1px solid var(--border); }
+  .code-head {
+    background: var(--surface2); padding: 10px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .code-head-title { font-size: 0.72rem; font-weight: 600; color: var(--muted); }
+  .code-head-lang {
+    font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; padding: 2px 8px;
+    border-radius: 2px;
+  }
+  .lang-excel { background: var(--green-light); color: var(--accent2); }
+  .lang-pq { background: var(--accent-light); color: var(--accent); }
+  .code-body {
+    background: #1e2a38; padding: 20px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem; line-height: 1.8; color: #cdd9e5;
+    overflow-x: auto;
+  }
+  .c-comment { color: #6e7e8f; }
+  .c-fn { color: #79c0ff; }
+  .c-str { color: #a5d6ff; }
+  .c-kw { color: #ff9f0a; }
+  .c-val { color: #7ee787; }
+
+  /* INSIGHT GRID */
+  .insight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+  .insight-card {
+    padding: 20px; border: 1px solid var(--border);
+    background: var(--surface); border-radius: 2px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .insight-card:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(26,86,219,0.08); }
+  .insight-icon { font-size: 1.2rem; margin-bottom: 8px; }
+  .insight-card h4 { font-size: 0.78rem; font-weight: 700; color: var(--dark); margin-bottom: 6px; letter-spacing: 0.02em; }
+  .insight-card p { font-size: 0.82rem; color: var(--muted); margin: 0; line-height: 1.6; }
+
+  /* TARGET TABLE */
+  .target-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.82rem; }
+  .target-table th {
+    font-size: 0.63rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 9px 12px;
+    color: var(--muted); background: var(--surface); border-bottom: 2px solid var(--border);
+    text-align: left;
+  }
+  .target-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  .target-table tr:hover td { background: var(--surface); }
+  .miss { color: var(--red); font-weight: 600; }
+  .month-label { font-weight: 600; color: var(--dark); }
+  .gap-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .gap-bar { height: 6px; background: var(--red); opacity: 0.7; border-radius: 3px; min-width: 4px; }
+
+  /* REC LIST */
+  .rec-list { list-style: none; margin: 16px 0; }
+  .rec-list li {
+    padding: 14px 0 14px 26px;
+    border-bottom: 1px solid var(--border);
+    position: relative; font-size: 0.9rem;
+  }
+  .rec-list li::before {
+    content: '→'; position: absolute; left: 0;
+    color: var(--accent); font-weight: 600;
+  }
+  .rec-list li strong { color: var(--dark); font-weight: 600; }
+
+  /* SIDEBAR */
+  .sidebar { }
+  .sidebar-card {
+    border: 1px solid var(--border);
+    margin-bottom: 20px; overflow: hidden;
+  }
+  .sidebar-card-head {
+    background: var(--surface2); padding: 12px 16px;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-card-body { padding: 16px; }
+  .s-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.82rem;
+  }
+  .s-row:last-child { border-bottom: none; }
+  .s-label { color: var(--ink); }
+  .s-val { font-weight: 700; color: var(--dark); font-size: 0.8rem; }
+  .s-val.green { color: var(--accent2); }
+  .s-val.red { color: var(--red); }
+  .s-val.blue { color: var(--accent); }
+
+  /* REQUIREMENT CHECKLIST */
+  .req-list { list-style: none; margin: 0; }
+  .req-list li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-size: 0.8rem; color: var(--ink);
+  }
+  .req-list li:last-child { border-bottom: none; }
+  .check { color: var(--accent2); font-size: 0.9rem; flex-shrink: 0; margin-top: 2px; }
+
+  /* TOOLS SECTION */
+  .tools-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0; }
+  .tool-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border: 1px solid var(--border);
+    background: var(--surface); font-size: 0.8rem; font-weight: 500;
+    color: var(--dark);
+  }
+  .tool-chip span { font-size: 1rem; }
+
+  /* DOWNLOAD */
+  .download-section {
+    background: var(--dark); padding: 56px 48px;
+  }
+  .dl-inner { max-width: 1100px; margin: 0 auto; }
+  .dl-inner h2 { font-family: 'Crimson Pro', serif; color: #fff; font-size: 1.5rem; margin-bottom: 8px; }
+  .dl-inner > p { color: rgba(255,255,255,0.4); font-size: 0.82rem; margin-bottom: 36px; }
+  .dl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+  .dl-btn {
+    display: flex; flex-direction: column; gap: 5px;
+    padding: 16px 18px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    text-decoration: none; transition: all 0.2s; cursor: pointer;
+  }
+  .dl-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.25); }
+  .dl-icon { font-size: 1.2rem; }
+  .dl-title { font-size: 0.8rem; font-weight: 600; color: #fff; }
+  .dl-sub { font-size: 0.66rem; color: rgba(255,255,255,0.35); }
+
+  /* FOOTER */
+  footer {
+    background: #080d13; border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 24px 48px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    align-items: center;
+  }
+  .footer-left { display: flex; flex-direction: column; gap: 4px; }
+  footer p { font-size: 0.72rem; color: rgba(255,255,255,0.3); }
+  footer a { font-size: 0.72rem; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: #fff; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  .fade { opacity: 0; }
+
+  @media (max-width: 900px) {
+    nav, .hero, .live-bar, .download-section, footer { padding-left: 20px; padding-right: 20px; }
+    .kpi-strip { grid-template-columns: repeat(3,1fr); }
+    .two-col { grid-template-columns: 1fr; gap: 0; }
+    .sidebar { border-top: 1px solid var(--border); padding-top: 40px; }
+    .page-wrap { padding: 0 20px; }
+    .insight-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <a href="#" class="nav-logo">Kehinde Odewabi</a>
+    <div class="nav-divider"></div>
+    <span class="nav-project">Capstone Project</span>
+    <span class="nav-badge">New Horizons</span>
+  </div>
+  <a href="https://kehindeodewabi.github.io/portfolio/" class="nav-back">← Portfolio</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-institution">
+      <span>🎓</span> New Horizons Learning Institute — Data Analytics Programme
+    </div>
+    <h1>Phone Sales <em>Performance</em> Analysis<br>Dashboard</h1>
+    <p class="hero-sub">A full-pipeline data analytics capstone project — from raw, messy Kaggle data through Excel cleaning, Power BI dashboarding, and Tableau storytelling — analysing 800 phone transactions across four Nigerian states.</p>
+    <div class="hero-meta-row">
+      <div class="meta-pill">
+        <div class="meta-label">Institution</div>
+        <div class="meta-value">New Horizons Learning Institute</div>
+      </div>
+      <div class="meta-pill">
+        <div class="meta-label">Tools</div>
+        <div class="meta-value">Excel · Power BI · Tableau</div>
+      </div>
+      <div class="meta-pill">
+        <div class="meta-label">Dataset</div>
+        <div class="meta-value">800 transactions · Kaggle</div>
+      </div>
+      <div class="meta-pill">
+        <div class="meta-label">Geography</div>
+        <div class="meta-value">4 Nigerian States</div>
+      </div>
+      <div class="meta-pill">
+        <div class="meta-label">Analyst</div>
+        <div class="meta-value">Kehinde Odewabi</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- LIVE LINKS -->
+<div class="live-bar">
+  <div class="live-bar-inner">
+    <span class="live-label">Live Dashboards</span>
+    <a href="https://app.powerbi.com/groups/me/reports/cb40a801-eda7-4bb8-97bf-0c7cef2188c1/b000d7e5041750b488c6?experience=power-bi&clientSideAuth=0" target="_blank" class="live-btn live-btn-pbi">
+      <div class="live-dot"></div> View Power BI Dashboard
+    </a>
+    <a href="https://public.tableau.com/app/profile/kehinde.odewabi/viz/DeliveryLogisticsPerformanceAnalysis/Summary" target="_blank" class="live-btn live-btn-tab">
+      <div class="live-dot"></div> View Tableau Dashboard
+    </a>
+  </div>
+</div>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip">
+  <div class="kpi-cell k1">
+    <div class="kpi-num blue">800</div>
+    <div class="kpi-label">Total Orders</div>
+    <div class="kpi-note">Across 4 states</div>
+  </div>
+  <div class="kpi-cell k2">
+    <div class="kpi-num green">₦2.41B</div>
+    <div class="kpi-label">Total Net Result</div>
+    <div class="kpi-note">Full year</div>
+  </div>
+  <div class="kpi-cell k3">
+    <div class="kpi-num amber">₦2.70B</div>
+    <div class="kpi-label">Annual Target</div>
+    <div class="kpi-note">Never achieved monthly</div>
+  </div>
+  <div class="kpi-cell k4">
+    <div class="kpi-num red">−10.8%</div>
+    <div class="kpi-label">Target Gap</div>
+    <div class="kpi-note">₦291M shortfall</div>
+  </div>
+  <div class="kpi-cell k5">
+    <div class="kpi-num" style="color:#8b5cf6">7</div>
+    <div class="kpi-label">Brands Analysed</div>
+    <div class="kpi-note">Tecno to Google</div>
+  </div>
+  <div class="kpi-cell k6">
+    <div class="kpi-num" style="color:#06b6d4">15%</div>
+    <div class="kpi-label">Avg. Discount</div>
+    <div class="kpi-note">Range: 0% – 30%</div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="page-wrap">
+  <div class="two-col">
+
+    <!-- MAIN ARTICLE -->
+    <main>
+
+      <!-- OVERVIEW -->
+      <section class="section">
+        <div class="sec-head">
+          <div class="sec-num">01</div>
+          <h2>Project Overview & Objectives</h2>
+        </div>
+        <p>This capstone project was completed as the final assessment for the Data Analytics programme at New Horizons Learning Institute. The brief required students to select a real-world dataset from Kaggle and analyse it end-to-end using three industry-standard tools: <strong>Microsoft Excel</strong>, <strong>Power BI</strong>, and <strong>Tableau</strong>.</p>
+        <p>The dataset selected covers 800 phone sales transactions across four Nigerian states — Federal Capital Territory, Lagos, Oyo, and Rivers — capturing brand, customer demographics, pricing, cost, discounts, and ratings over a full calendar year.</p>
+        <p>The analysis was structured around seven business questions: sales performance trends, brand and product performance, customer behaviour, geographical distribution, profitability and cost dynamics, customer satisfaction, and monthly target achievement.</p>
+        <div class="tools-row">
+          <div class="tool-chip"><span>📊</span> Microsoft Excel</div>
+          <div class="tool-chip"><span>⚡</span> Power Query</div>
+          <div class="tool-chip"><span>📈</span> Power BI + DAX</div>
+          <div class="tool-chip"><span>🗺</span> Tableau</div>
+        </div>
+      </section>
+
+      <!-- DATA CLEANING -->
+      <section class="section">
+        <div class="sec-head">
+          <div class="sec-num">02</div>
+          <h2>Data Cleaning & Preparation</h2>
+        </div>
+        <p>The raw dataset contained <strong>800 rows and 12 columns</strong>. Despite having no missing values, several data quality issues were found that would have compromised the integrity of any analysis left uncorrected.</p>
+
+        <h3>Issues Found in the Raw Data</h3>
+        <p>A close inspection of the <code>brand</code> column revealed <strong>6 misspelled entries</strong> across 4 brands — "Opo" (2×), "Aple" (2×), "Tecn" (1×), "Samsng" (1×), "Gogle" (1×). These were inconsistencies that would cause any GROUP BY or pivot operation to produce incorrect brand totals.</p>
+        <p>The <code>state</code> column used abbreviations throughout ("OYO", "LAG", "FCT", "RIV") — valid for a raw data store but unhelpful for dashboard labels. All four were expanded to full state names.</p>
+        <p>Column headers used inconsistent casing and spacing (e.g. <code>unit cost</code> with a space, <code>customer_rating</code> with an underscore, <code>orderdate</code> as one word).</p>
+
+        <table class="clean-table">
+          <thead>
+            <tr><th>Column / Issue</th><th>Type</th><th>Raw Value</th><th>Cleaned Value</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>brand — misspellings</td><td><span class="tag tag-fix">FIXED</span></td><td><code>Opo</code>, <code>Aple</code>, <code>Tecn</code>, <code>Samsng</code>, <code>Gogle</code></td><td>Oppo, Apple, Tecno, Samsung, Google</td></tr>
+            <tr><td>state — abbreviations</td><td><span class="tag tag-fix">FIXED</span></td><td><code>OYO</code>, <code>LAG</code>, <code>FCT</code>, <code>RIV</code></td><td>Oyo, Lagos, Federal Capital Territory, Rivers</td></tr>
+            <tr><td>unitprice → Unit Sales Price</td><td><span class="tag tag-rename">RENAMED</span></td><td><code>unitprice</code></td><td>Unit Sales Price</td></tr>
+            <tr><td>unit cost → Unit Cost</td><td><span class="tag tag-rename">RENAMED</span></td><td><code>unit cost</code></td><td>Unit Cost</td></tr>
+            <tr><td>customerage → Customer Age</td><td><span class="tag tag-rename">RENAMED</span></td><td><code>customerage</code></td><td>Customer Age</td></tr>
+            <tr><td>customer_rating → Customer Rating</td><td><span class="tag tag-rename">RENAMED</span></td><td><code>customer_rating</code></td><td>Customer Rating</td></tr>
+            <tr><td>Cost Price</td><td><span class="tag tag-add">NEW COLUMN</span></td><td>—</td><td><code>=Unit Cost × Units Sold</code></td></tr>
+            <tr><td>Sales Price / Revenue</td><td><span class="tag tag-add">NEW COLUMN</span></td><td>—</td><td><code>=(Unit Price × Units Sold) − Discount</code></td></tr>
+            <tr><td>Net Result</td><td><span class="tag tag-add">NEW COLUMN</span></td><td>—</td><td><code>=Revenue − Cost Price</code></td></tr>
+            <tr><td>Profit / Loss</td><td><span class="tag tag-add">NEW COLUMN</span></td><td>—</td><td>Positive / Negative label based on Net Result</td></tr>
+            <tr><td>Met Target?</td><td><span class="tag tag-add">NEW COLUMN</span></td><td>—</td><td><code>=IF(Net Result ≥ Target, "Yes", "No")</code></td></tr>
+            <tr><td>VLOOKUP population (Analysis sheet)</td><td><span class="tag tag-add">NEW</span></td><td>—</td><td>Used to pull values from raw into Analysis sheet by Order ID</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- FORMULAS -->
+      <section class="section">
+        <div class="sec-head">
+          <div class="sec-num">03</div>
+          <h2>Key Excel Formulas Used</h2>
+        </div>
+
+        <h3>Cost Price — Total cost per order</h3>
+        <div class="code-wrap">
+          <div class="code-head">
+            <span class="code-head-title">Cost Price Column (Col L)</span>
+            <span class="code-head-lang lang-excel">Excel</span>
+          </div>
+          <div class="code-body">
+<span class="c-comment">// Total cost for an order = unit cost × quantity</span>
+=<span class="c-fn">H2</span>*<span class="c-fn">J2</span>
+<span class="c-comment">// H2 = Unit Cost, J2 = Units Sold</span></div>
+        </div>
+
+        <h3>Revenue — After discount applied</h3>
+        <div class="code-wrap">
+          <div class="code-head">
+            <span class="code-head-title">Sales Price / Revenue (Col N)</span>
+            <span class="code-head-lang lang-excel">Excel</span>
+          </div>
+          <div class="code-body">
+<span class="c-comment">// Revenue = (unit price × units sold) minus discount portion</span>
+=(<span class="c-fn">I2</span>*<span class="c-fn">J2</span>)-(<span class="c-fn">I2</span>*<span class="c-fn">J2</span>*<span class="c-fn">K2</span>)
+<span class="c-comment">// I2=Unit Sales Price, J2=Units Sold, K2=Discount (decimal)</span>
+<span class="c-comment">// Equivalent to: =I2*J2*(1-K2)</span></div>
+        </div>
+
+        <h3>Net Result — Profit per order</h3>
+        <div class="code-wrap">
+          <div class="code-head">
+            <span class="code-head-title">Net Result Column (Col O)</span>
+            <span class="code-head-lang lang-excel">Excel</span>
+          </div>
+          <div class="code-body">
+<span class="c-comment">// Net result = Revenue minus total cost</span>
+=<span class="c-fn">N2</span>-<span class="c-fn">L2</span>
+<span class="c-comment">// N2 = Sales Revenue, L2 = Cost Price</span></div>
+        </div>
+
+        <h3>Met Target? — Conditional flag</h3>
+        <div class="code-wrap">
+          <div class="code-head">
+            <span class="code-head-title">Met Target Column (Col Q)</span>
+            <span class="code-head-lang lang-excel">Excel</span>
+          </div>
+          <div class="code-body">
+<span class="c-comment">// Returns "Yes" if net result meets or exceeds the target</span>
+=<span class="c-fn">IF</span>(<span class="c-fn">O2</span>&gt;=<span class="c-fn">M2</span>, <span class="c-str">"Yes"</span>, <span class="c-str">"No"</span>)
+<span class="c-comment">// O2 = Net Result, M2 = Target Net Result</span></div>
+        </div>
+
+        <h3>Monthly Target Gap — Difference formula</h3>
+        <div class="code-wrap">
+          <div class="code-head">
+            <span class="code-head-title">Monthly Target Sheet — Difference Column</span>
+            <span class="code-head-lang lang-excel">Excel</span>
+          </div>
+          <div class="code-body">
+<span class="c-comment">// Gap between target and actual result per month</span>
+=<span class="c-fn">B5</span>-<span class="c-fn">C5</span>
+<span class="c-comment">// B5 = Target Net Result, C5 = Actual Net Result</span>
+<span class="c-comment">// Applied for all 12 months + grand total row</span></div>
+        </div>
+
+        <h3>VLOOKUP — Populating the Analysis sheet</h3>
+        <div class="code-wrap">
+          <div class="code-head">
+            <span class="code-head-title">VLOOKUP to pull data from raw sheet by Order ID</span>
+            <span class="code-head-lang lang-excel">Excel</span>
+          </div>
+          <div class="code-body">
+<span class="c-comment">// Pulls the Brand value from the raw data sheet by matching Order ID</span>
+=<span class="c-fn">VLOOKUP</span>(<span class="c-kw">$A$176</span>, <span class="c-kw">$A$1:$P$801</span>, <span class="c-val">2</span>, <span class="c-str">FALSE</span>)
+<span class="c-comment">// A176 = Order ID to look up</span>
+<span class="c-comment">// $A$1:$P$801 = full raw data range (locked)</span>
+<span class="c-comment">// 2 = return the 2nd column (Brand)</span>
+<span class="c-comment">// FALSE = exact match only</span></div>
+        </div>
+
+        <h3>Power Query Transformations (Power BI)</h3>
+        <div class="code-wrap">
+          <div class="code-head">
+            <span class="code-head-title">Power Query Steps Applied</span>
+            <span class="code-head-lang lang-pq">Power Query</span>
+          </div>
+          <div class="code-body">
+<span class="c-comment">// 1. Replace abbreviated state values with full names</span>
+Replace Values: <span class="c-str">"OYO"</span> → <span class="c-str">"Oyo state"</span>
+Replace Values: <span class="c-str">"LAG"</span> → <span class="c-str">"Lagos state"</span>
+Replace Values: <span class="c-str">"FCT"</span> → <span class="c-str">"Federal Capital Territory"</span>
+Replace Values: <span class="c-str">"RIV"</span> → <span class="c-str">"Rivers state"</span>
+
+<span class="c-comment">// 2. Correct data types</span>
+Change Type: orderdate → <span class="c-kw">Date</span>
+Change Type: unitssold → <span class="c-kw">Whole Number</span>
+Change Type: discount → <span class="c-kw">Decimal (Percentage)</span>
+
+<span class="c-comment">// 3. Remove blank rows</span>
+Remove Rows Where: any key column = null
+
+<span class="c-comment">// 4. Rename columns to clean display names</span>
+Rename: <span class="c-str">"unitprice"</span> → <span class="c-str">"Unit Sales Price"</span>
+Rename: <span class="c-str">"unit cost"</span> → <span class="c-str">"Unit Cost"</span></div>
+        </div>
+      </section>
+
+      <!-- KEY INSIGHTS -->
+      <section class="section">
+        <div class="sec-head">
+          <div class="sec-num">04</div>
+          <h2>Key Findings</h2>
+        </div>
+
+        <h3>Monthly Target Achievement — Zero months met</h3>
+        <p>The most significant finding of this analysis is that <strong>no monthly target was met across the entire year</strong>. The closest month was January (−9.9% gap) and the furthest was December (−13.2% gap). The total annual shortfall was <strong>₦291.4M</strong> against a target of ₦2.70B.</p>
+
+        <table class="target-table">
+          <thead><tr><th>Month</th><th>Target (₦M)</th><th>Actual (₦M)</th><th>Gap</th></tr></thead>
+          <tbody>
+            <tr><td class="month-label">May</td><td>298.0</td><td>270.6</td><td><span class="miss">−27.4M</span> <div class="gap-bar" style="width:55px;display:inline-block"></div></td></tr>
+            <tr><td class="month-label">Jun</td><td>270.6</td><td>244.2</td><td><span class="miss">−26.4M</span> <div class="gap-bar" style="width:52px;display:inline-block"></div></td></tr>
+            <tr><td class="month-label">Sep</td><td>259.4</td><td>233.4</td><td><span class="miss">−26.0M</span> <div class="gap-bar" style="width:50px;display:inline-block"></div></td></tr>
+            <tr><td class="month-label">Jul</td><td>250.7</td><td>224.8</td><td><span class="miss">−25.9M</span> <div class="gap-bar" style="width:50px;display:inline-block"></div></td></tr>
+            <tr><td class="month-label">Dec</td><td>231.4</td><td>201.0</td><td><span class="miss">−30.5M</span> <div class="gap-bar" style="width:60px;display:inline-block"></div></td></tr>
+            <tr><td class="month-label">Jan</td><td>165.8</td><td>149.4</td><td><span class="miss">−16.4M</span> <div class="gap-bar" style="width:32px;display:inline-block"></div></td></tr>
+          </tbody>
+        </table>
+
+        <div class="insight-grid">
+          <div class="insight-card">
+            <div class="insight-icon">🏆</div>
+            <h4>Tecno — Revenue Leader</h4>
+            <p>Tecno led all brands in total revenue and units sold across all four states, consistently outperforming Samsung and Oppo which placed second and third.</p>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">🔄</div>
+            <h4>Returning Customers Spend More</h4>
+            <p>Returning customers ordered more units per transaction and generated higher average revenue compared to new customers — a clear case for loyalty investment.</p>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">📍</div>
+            <h4>Lagos & Oyo Lead Sales</h4>
+            <p>Lagos and Oyo consistently generated the highest sales volumes. FCT followed closely behind. Rivers had the lowest net revenue but — surprisingly — the highest average customer rating.</p>
+          </div>
+          <div class="insight-card">
+            <div class="insight-icon">💸</div>
+            <h4>Discounts Squeeze Margins</h4>
+            <p>Higher discount levels directly correlated with reduced profitability. With discounts ranging from 0% to 30%, pricing discipline is a key lever for margin improvement.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- RECOMMENDATIONS -->
+      <section class="section">
+        <div class="sec-head">
+          <div class="sec-num">05</div>
+          <h2>Recommendations</h2>
+        </div>
+        <ul class="rec-list">
+          <li><strong>Bolster customer retention with a loyalty programme.</strong> Returning customers already outspend new ones — a structured loyalty reward system would amplify this effect and improve lifetime value.</li>
+          <li><strong>Expand market penetration in Rivers State.</strong> Rivers has the lowest revenue but the highest customer satisfaction scores. High satisfaction with low volume is an untapped growth opportunity.</li>
+          <li><strong>Implement controlled discounting policies.</strong> The current 0–30% discount range is too broad. Capping maximum discounts and linking them to inventory age or volume thresholds would protect margins.</li>
+          <li><strong>Prioritise Tecno and Samsung inventory.</strong> These two brands dominate sales volume across all states. Ensuring consistent stock availability — especially during peak months — would reduce lost sales.</li>
+          <li><strong>Investigate December performance specifically.</strong> December had the largest target gap (−₦30.5M) despite being a festive month. This warrants a targeted promotional strategy — increased discounts or bundle offers — in future cycles.</li>
+          <li><strong>Revise monthly targets using historical actuals.</strong> No month met its target across the full year, suggesting the targets may be miscalibrated. Targets built on rolling averages would be more actionable.</li>
+        </ul>
+      </section>
+
+      <!-- CONCLUSION -->
+      <section class="section">
+        <div class="sec-head">
+          <div class="sec-num">06</div>
+          <h2>Conclusion</h2>
+        </div>
+        <p>This project demonstrates a complete data analytics workflow from raw data to business intelligence. Beginning with messy Kaggle data — containing brand misspellings, abbreviated state codes, and unformatted columns — the dataset was cleaned and enriched in Excel with five new calculated columns before being modelled in Power BI and visualised in Tableau.</p>
+        <p>The core finding is that while the business generated ₦2.41B in net result over the year, it fell short of every single monthly target — a structural issue that goes beyond seasonal variation and points to a need for more grounded target-setting, tighter discount management, and focused regional strategy in underperforming states.</p>
+        <p>The three-tool pipeline — Excel for data preparation, Power BI for interactive business dashboards, and Tableau for visual storytelling — reflects industry-standard practice for a data analyst role.</p>
+      </section>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-head">Project Requirements Met</div>
+        <div class="sidebar-card-body">
+          <ul class="req-list">
+            <li><span class="check">✓</span> 500+ rows, 8+ columns</li>
+            <li><span class="check">✓</span> Mix of categorical & numerical</li>
+            <li><span class="check">✓</span> Date column present</li>
+            <li><span class="check">✓</span> 3+ calculated columns in Excel</li>
+            <li><span class="check">✓</span> SUMIFS / IF / VLOOKUP used</li>
+            <li><span class="check">✓</span> Excel dashboard built</li>
+            <li><span class="check">✓</span> Power Query transformations</li>
+            <li><span class="check">✓</span> 4+ DAX measures</li>
+            <li><span class="check">✓</span> 2-page Power BI report</li>
+            <li><span class="check">✓</span> 7+ Tableau charts</li>
+            <li><span class="check">✓</span> Map chart included</li>
+            <li><span class="check">✓</span> 2 Tableau dashboards</li>
+            <li><span class="check">✓</span> Tableau story points</li>
+            <li><span class="check">✓</span> 2-page written report</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-head">Brand Performance</div>
+        <div class="sidebar-card-body">
+          <div class="s-row"><span class="s-label">Tecno</span><span class="s-val green">#1 Revenue</span></div>
+          <div class="s-row"><span class="s-label">Samsung</span><span class="s-val">#2</span></div>
+          <div class="s-row"><span class="s-label">Oppo</span><span class="s-val">#3</span></div>
+          <div class="s-row"><span class="s-label">Infinix</span><span class="s-val">#4</span></div>
+          <div class="s-row"><span class="s-label">Xiaomi</span><span class="s-val">#5</span></div>
+          <div class="s-row"><span class="s-label">Apple</span><span class="s-val">#6</span></div>
+          <div class="s-row"><span class="s-label">Google</span><span class="s-val">#7</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-head">State Highlights</div>
+        <div class="sidebar-card-body">
+          <div class="s-row"><span class="s-label">Highest revenue</span><span class="s-val green">Lagos</span></div>
+          <div class="s-row"><span class="s-label">Highest ratings</span><span class="s-val blue">Rivers</span></div>
+          <div class="s-row"><span class="s-label">Lowest revenue</span><span class="s-val red">Rivers</span></div>
+          <div class="s-row"><span class="s-label">FCT vs Oyo</span><span class="s-val">Close gap</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-head">Target Achievement</div>
+        <div class="sidebar-card-body">
+          <div class="s-row"><span class="s-label">Months hitting target</span><span class="s-val red">0 / 12</span></div>
+          <div class="s-row"><span class="s-label">Best month (gap)</span><span class="s-val">Jan −9.9%</span></div>
+          <div class="s-row"><span class="s-label">Worst month (gap)</span><span class="s-val red">Dec −13.2%</span></div>
+          <div class="s-row"><span class="s-label">Total shortfall</span><span class="s-val red">₦291.4M</span></div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-card-head">Dataset Stats</div>
+        <div class="sidebar-card-body">
+          <div class="s-row"><span class="s-label">Total rows</span><span class="s-val">800</span></div>
+          <div class="s-row"><span class="s-label">Raw columns</span><span class="s-val">12</span></div>
+          <div class="s-row"><span class="s-label">New columns added</span><span class="s-val green">5</span></div>
+          <div class="s-row"><span class="s-label">Brand errors fixed</span><span class="s-val">6 entries</span></div>
+          <div class="s-row"><span class="s-label">Customer age range</span><span class="s-val">18 – 69</span></div>
+          <div class="s-row"><span class="s-label">Discount range</span><span class="s-val">0% – 30%</span></div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div><!-- end two-col -->
+</div><!-- end page-wrap -->
+
+<!-- DOWNLOADS -->
+<section class="download-section">
+  <div class="dl-inner">
+    <h2>Project Files</h2>
+    <p>Download all source files — Excel workbook, Power BI report, Tableau workbook, and written report.</p>
+    <div class="dl-grid">
+      <a href="https://app.powerbi.com/groups/me/reports/cb40a801-eda7-4bb8-97bf-0c7cef2188c1/b000d7e5041750b488c6?experience=power-bi&clientSideAuth=0" target="_blank" class="dl-btn">
+        <span class="dl-icon">📊</span>
+        <span class="dl-title">Live Power BI</span>
+        <span class="dl-sub">Power BI Service</span>
+      </a>
+      <a href="https://public.tableau.com/app/profile/kehinde.odewabi/viz/DeliveryLogisticsPerformanceAnalysis/Summary" target="_blank" class="dl-btn">
+        <span class="dl-icon">🗺</span>
+        <span class="dl-title">Live Tableau</span>
+        <span class="dl-sub">Tableau Public</span>
+      </a>
+      <a href="#" class="dl-btn">
+        <span class="dl-icon">📁</span>
+        <span class="dl-title">Power BI File</span>
+        <span class="dl-sub">.pbix — Desktop</span>
+      </a>
+      <a href="#" class="dl-btn">
+        <span class="dl-icon">📋</span>
+        <span class="dl-title">Excel Workbook</span>
+        <span class="dl-sub">.xlsx — Full analysis</span>
+      </a>
+      <a href="#" class="dl-btn">
+        <span class="dl-icon">📊</span>
+        <span class="dl-title">Tableau Workbook</span>
+        <span class="dl-sub">.twbx — Packaged</span>
+      </a>
+      <a href="#" class="dl-btn">
+        <span class="dl-icon">📄</span>
+        <span class="dl-title">Written Report</span>
+        <span class="dl-sub">.docx — Word</span>
+      </a>
+      <a href="#" class="dl-btn">
+        <span class="dl-icon">📑</span>
+        <span class="dl-title">Dashboard PDF</span>
+        <span class="dl-sub">.pdf — Power BI export</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <p>Kehinde Odewabi — Data Analyst</p>
+    <p>Capstone Project · New Horizons Learning Institute</p>
+  </div>
+  <a href="https://kehindeodewabi.github.io/portfolio/">← Back to Portfolio</a>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.06 });
+
+  document.querySelectorAll('.section, .kpi-cell').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
